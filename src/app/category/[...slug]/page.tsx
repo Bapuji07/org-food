@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import ProductList from '../../../../component/productList';
 import CategoryShortcut from '../../../../component/categoryShortcut';
 import Shimmer from '../../../../component/shimmerui';
+import FilterComponent from '../../../../component/filterBy';
 import debounce from 'debounce';
 
 export default function CategoryPage() {
@@ -14,9 +15,9 @@ export default function CategoryPage() {
   const [currentPage, setCurrentPage] = useState(1); // Track the current page
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [hasMore, setHasMore] = useState(true); // Flag for more products
-
   const [total, setTotal] = useState(0); // Total number of products
   const [maxPages, setMaxPages] = useState(1); // Maximum number of pages
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
     const getCategories = async () => {
@@ -54,9 +55,12 @@ export default function CategoryPage() {
 
     const categoryIds = categories.children ? collectCategoryIds(categories) : categories.id;
     setIsLoading(true);
-
+    let query=''
+if (Object.keys(filters).length > 0) {
+  query = new URLSearchParams(filters).toString();
+}
     try {
-      const response = await fetch(`/api/products?page=${currentPage}&categoryId=${categoryIds}`);
+      const response = await fetch(`/api/products?page=${currentPage}&categoryId=${categoryIds}${query ? `&${query}` : ''}`);
       if (!response.ok) throw new Error('Failed to fetch products');
       const data = await response.json();
       console.log(data,'data================>')
@@ -90,8 +94,14 @@ export default function CategoryPage() {
   };
 
   fetchProducts();
-}, [categories, currentPage]);
+}, [categories, currentPage,filters]);
 
+useEffect(() => {
+  // Reset products and pagination when filters change
+  setProducts([]);  // Clear previous products
+  setCurrentPage(1); // Reset pagination
+  setHasMore(true);  // Reset hasMore flag
+}, [filters]);
 const handleScroll = debounce(() => {
   const threshold = window.innerHeight * 0.9; 
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - threshold && !isLoading && hasMore) {
@@ -107,9 +117,19 @@ useEffect(() => {
   return () => window.removeEventListener('scroll', handleScroll);
 }, [isLoading, hasMore,currentPage, maxPages]);
 
+const handleFilterChange = (appliedFilters:any) => {
+  setFilters(appliedFilters);
+};
+// let query=''
+// if (Object.keys(filters).length > 0) {
+//   query = new URLSearchParams(filters).toString();
+// }
+
+console.log(filters,'filters================>')
+
   return (
     <div className="bg-gray-100">
-      <div className='container p-5'>
+      <div className='container flex mx-auto p-4'>
         <div className="flex flex-col ps-20"style={{width:'75%'}}>
           <CategoryShortcut />
           <Suspense fallback={<Shimmer />}>
@@ -118,6 +138,10 @@ useEffect(() => {
           </Suspense>
           {!hasMore && <p>No more products to load.</p>} {/* Message when all products are loaded */}
         </div>
+        {
+          !isLoading &&
+        <FilterComponent onFilterChange={handleFilterChange} />
+        }
       </div>
     </div>
   );

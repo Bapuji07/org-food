@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import CategoryFilter from "../../component/categoryHeader";
+import { SelectedCategoryProvider } from "../../context/selectedCategory";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -22,8 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <SelectedCategoryProvider>
         <CategoryFilter/>
-        {children}</body>
+        {children}
+
+        </SelectedCategoryProvider>
+        </body>
+
     </html>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useSelectedCategory } from '../context/selectedCategory';
 
 export default function CategoryShortcut() {
   const { slug } = useParams(); 
@@ -8,7 +9,7 @@ export default function CategoryShortcut() {
 
   // State for categories and products
   const [categories, setCategories] = useState<any>({});
-  console.log(categories,'ffffffffffffffff')
+  const {setSelectedCategory}=useSelectedCategory()
     
   useEffect(() => {
     const getCategories = async () => {
@@ -30,7 +31,8 @@ export default function CategoryShortcut() {
   }, [slug]);
 
 
-  const handleCategoryClick = (slug: string) => {
+  const handleCategoryClick = (slug: string,name:string) => {
+    setSelectedCategory(name)
     router.push(`/category/${slug}`);
   };
 
@@ -42,7 +44,7 @@ export default function CategoryShortcut() {
                 className={`border h-10 border-gray-300 cursor-pointer rounded-full px-4 py-2 text-center text-sm font-semibold shadow-md ${
                   category.slug == slug ? 'bg-green-600 text-white' : 'bg-white'
                 } transition-shadow duration-300`}
-                onClick={() => handleCategoryClick(category.slug)}
+                onClick={() => handleCategoryClick(category.slug,category.name)}
               >
                 {category.name}
               </div>

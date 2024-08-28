@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelectedCategory } from '../context/selectedCategory';
 
 interface Category {
   name: string;
@@ -18,6 +19,8 @@ export default function CategoryFilter() {
   const [showCategory, setShowCategory] = useState<boolean>(false);
   const [subCategories, setSubCategories] = useState<Category[]>([]);
   const [lastCategories, setLastCategories] = useState<Category[]>([]);
+  const {selectedCategory,setSelectedCategory}=useSelectedCategory()
+  console.log(selectedCategory,'selected')
 
   useEffect(() => {
     const getCategories = async () => {
@@ -38,7 +41,7 @@ export default function CategoryFilter() {
   }, []);
 
   const handleCategoryClick = (selectedCategory: string,selectedCategoryName:string) => {
-    setCategory(selectedCategoryName);
+    setSelectedCategory(selectedCategoryName);
     router.push(`/category/${selectedCategory}`);
     setShowCategory(false); 
   };
@@ -125,7 +128,7 @@ export default function CategoryFilter() {
           )}
         </div>
 
-        <span className="font-extrabold text-xl p-3">{category}</span>
+        <span className="font-extrabold text-xl p-3">{selectedCategory}</span>
       </div>
     </>
   );
