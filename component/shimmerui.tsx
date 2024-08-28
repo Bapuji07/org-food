@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Shimmer() {
   return (
-    <div className="animate-pulse p-4">
+    <div className="animate-pulse">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {/* Simulating multiple shimmer cards */}
         {Array.from({ length: 12 }).map((_, index) => (
@@ -16,8 +16,10 @@ export default function Shimmer() {
 
             {/* Text shimmer */}
             <div className="flex flex-col gap-2">
-              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+              <div className="h-5 bg-gray-300 rounded w-3/4 m-auto"></div>
+              <div className="h-4 bg-gray-300 rounded w-2/3 m-auto"></div>
+              <div className="h-3 bg-gray-300 rounded w-1/2 m-auto"></div>
+              <div className="h-3 bg-gray-300 rounded w-1/2 m-auto"></div>
             </div>
 
             {/* Button shimmer */}

@@ -6,6 +6,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     // Extract categoryId from query parameters
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get('categoryId');
+    const page = searchParams.get('page');
 
     if (!categoryId) {
       return NextResponse.json(
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     // console.log(categoryId,'ooo')
 
     // Fetch products based on categoryId
-    const response = await fetch(`https://ofc-ecom-web.exceloid.in/api/products?size=16&page=1&category=${categoryId}&orderDirection=asc`);
+    const response = await fetch(`https://ofc-ecom-web.exceloid.in/api/products?size=16&page=${page}&category=${categoryId}&orderDirection=asc`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`);

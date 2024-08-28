@@ -1,32 +1,20 @@
-'use client';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Image from 'next/image';
 
-export default function ProductList({ products }: any) {
-  const router = useRouter();
-
-  const handleClick = (product: any) => {
-    const { slug } = product;
-    router.push(`/product/${slug}`);
-  };
-
-  if (!products) {
-    return <div>No products were found</div>;
-  }
+const YouMayAlsoLike = ({products}) => {
 
   return (
-    <div className="flex flex-row" style={{ backgroundColor: '#f2f2f2', paddingTop: '10px' }}>
-      <div className="gap-3 w-full">
-        <div className="flex flex-col flex-shrink text-black my-8">
-          <div className="grid h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4">
-            {products.map((product: any) => {
+    <div className="flex flex-col text-black mt-7 px-8 mx-auto " style={{width:'85%'}}>
+      <h1 className="text-lg md:text-xl  text-orange-600 font-extrabold my-2">
+        You May Also Like
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 ">
+      {products?.map((product: any) => {
               const imageUrl = product.images[0]?.url || 'https://ofc-ecom-web.exceloid.in/_nuxt/img/no-image.327c892.jpg';
               return (
                 <div key={product.id} className="relative">
                   <div
-                    onClick={() => handleClick(product)}
                     className="border border-gray-200 bg-white rounded-lg flex flex-col justify-between cursor-pointer p-5 relative"
                     style={{ height: '350px', width: '200px' }} // Fixed height for all cards
                   >
@@ -50,7 +38,7 @@ export default function ProductList({ products }: any) {
                         {product.shortName}
                       </div>
                       <p className="text-sm font-semibold pr-2" style={{ fontSize: '12px' }}>
-                        {`AED ${product.price}/${product.splitUnit}`}
+                        {`${product.price}/${product.splitUnit}`}
                       </p>
                       <div
                         className="text-gray-400 mt-1"
@@ -88,9 +76,9 @@ export default function ProductList({ products }: any) {
                 </div>
               );
             })}
-          </div>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default YouMayAlsoLike;
