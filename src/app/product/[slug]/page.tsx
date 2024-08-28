@@ -21,12 +21,15 @@ interface ProductDetails {
   presentation: string;
   sku: string;
 }
+interface RelatedProducts{
+  data?:[];
+}
 
 export default function ProductDetails() {
   const [productDetails, setProductDetails] = useState<ProductDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('description');
-  const [relatedProducts,setRelatedProducts]=useState([])
+  const [relatedProducts,setRelatedProducts]=useState<RelatedProducts | null>(null)
   const [error, setError] = useState<string | null>(null);
   const searchParams = useParams();
   const name = searchParams.slug;
@@ -88,7 +91,6 @@ export default function ProductDetails() {
 
   const imgUrl = productDetails.images?.[0]?.url || '/placeholder-image.png';
   const brandName = productDetails.brand?.name || 'Unknown Brand';
-  console.log(relatedProducts?.similar,'relative')
 
   return (
     <div className="bg-gray-100">
@@ -167,8 +169,8 @@ export default function ProductDetails() {
           {activeSection === 'ingredients' && <p>{productDetails.ingredients || 'Ingredients not available'}</p>}
         </div>
       </div>
-      <YouMayAlsoLike products={relatedProducts.data?.similar} />
-      <Alternative products={relatedProducts.data?.alternatives}/>
+      <YouMayAlsoLike products={relatedProducts?.data} />
+      <Alternative products={relatedProducts?.data}/>
     </div>
   );
 }

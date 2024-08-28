@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Alternative = ({products}) => {
+const Alternative = ({products}:any) => {
   return (
     <div className="flex flex-col text-black mt-7 px-8 mx-auto " style={{width:'85%'}}>
       <h1 className="text-lg md:text-xl  text-green-600 font-extrabold my-2">
 Alternative
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 ">
-      {products?.map((product: any) => {
+      {products?.alternatives?.map((product: any) => {
               const imageUrl = product.images[0]?.url || 'https://ofc-ecom-web.exceloid.in/_nuxt/img/no-image.327c892.jpg';
               return (
                 <div key={product.id} className="relative">

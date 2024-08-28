@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const YouMayAlsoLike = ({products}) => {
+const YouMayAlsoLike = ({products}:any) => {
 
   return (
     <div className="flex flex-col text-black mt-7 px-8 mx-auto " style={{width:'85%'}}>
@@ -10,7 +10,7 @@ const YouMayAlsoLike = ({products}) => {
         You May Also Like
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 ">
-      {products?.map((product: any) => {
+      {products?.similar?.map((product: any) => {
               const imageUrl = product.images[0]?.url || 'https://ofc-ecom-web.exceloid.in/_nuxt/img/no-image.327c892.jpg';
               return (
                 <div key={product.id} className="relative">
