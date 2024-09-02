@@ -7,7 +7,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get('category');
     const page = searchParams.get('page');
-    const filters = [];
+    const filters: string[] = [];
     searchParams.forEach((value, key) => {
       if (key !== 'category' && key !== 'page') {
         filters.push(`${key}=${value}`);
