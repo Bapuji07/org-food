@@ -3,7 +3,7 @@ import React from 'react';
 export default function Shimmer() {
   return (
     <div className="animate-pulse">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="shimmer-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {/* Simulating multiple shimmer cards */}
         {Array.from({ length: 12 }).map((_, index) => (
           <div
