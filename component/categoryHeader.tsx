@@ -1,44 +1,63 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight,faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelectedCategory } from '../context/selectedCategory';
-
+import { useCategories } from '../hooks/useGetCategories';
+import SideNavCategoryContext from '../context/sideNavCategory';
 interface Category {
   name: string;
   slug: string;
   children?: Category[];
 }
 
-export default function CategoryFilter() {
+export default function CategoryFilter({onCategoryChange}) {
   const router = useRouter();
-  const [category, setCategory] = useState<string>('');
-  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  // const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [showCategory, setShowCategory] = useState<boolean>(false);
   const [subCategories, setSubCategories] = useState<Category[]>([]);
   const [lastCategories, setLastCategories] = useState<Category[]>([]);
   const {selectedCategory,setSelectedCategory}=useSelectedCategory()
+  const { allCategoriesss, fetchCategories } = useCategories();
+
+  // const context = useContext(SideNavCategoryContext);
+  // if (!context) {
+  //   throw new Error("LayoutContent must be used within a SideNavCategoryProvider");
+  // }
+
+  // const { setShowSideNavCategory } = context;
+  const handleSideNavCategories=(value:boolean)=>{
+    onCategoryChange(value)
+  }
+
   console.log(selectedCategory,'selected')
+  useEffect(()=>{
+    fetchCategories()
+    // setAllCategories(allCategoriesss)
+  },[])
 
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const response = await fetch('/api/category');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        const data: Category[] = await response.json();
-        console.log(data,'ggg')
-        setAllCategories(data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
+  console.log(allCategoriesss,'fffffffffffffffffff')
+  // console.log(allCategories,'pppppppppppppppppp')
 
-    getCategories();
-  }, []);
+  // useEffect(() => {
+  //   const getCategories = async () => {
+  //     try {
+  //       const response = await fetch('/api/category');
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch categories');
+  //       }
+  //       const data: Category[] = await response.json();
+  //       console.log(data,'ggg')
+  //       setAllCategories(data);
+  //     } catch (error) {
+  //       console.error('Error fetching categories:', error);
+  //     }
+  //   };
+
+  //   getCategories();
+  // }, []);
 
   const handleCategoryClick = (selectedCategory: string,selectedCategoryName:string) => {
     setSelectedCategory(selectedCategoryName);
@@ -63,17 +82,17 @@ export default function CategoryFilter() {
   };
 
   return (
-    <>
+    < div >
       <div
-        className="flex flex-wrap gap-4 justify-start ps-20 border-b-4 border-green-600 p-5 bg-white"
-      >
-        <div className="relative flex flex-col" onMouseLeave={handleMouseLeave}>
+        className="flex gap-4 hidden lg:block   py-4 border-b-4 border-green-600  bg-white">
+        <div className="relative flex  w-[90%] lg:w-[85%] 2xl:w-[75%] mx-auto" onMouseLeave={handleMouseLeave}>
           <div
-            className="flex items-center gap-2 font-extrabold text-green-600 text-xl p-3 cursor-pointer"
-            onMouseEnter={handleCategoryMouseEnter}
-          >
-            ALL CATEGORIES{' '}
+            className="flex items-center gap-2 font-extrabold text-green-600 text-xl p-3 ">
+            <div onMouseEnter={handleCategoryMouseEnter}  className='inline-flex gap-2 items-center cursor-pointer'>
+            <p>ALL CATEGORIES</p>
             <FontAwesomeIcon icon={faAngleDown} className="text-xl" />
+
+            </div>
           </div>
           {showCategory && (
             <div
@@ -83,7 +102,7 @@ export default function CategoryFilter() {
             >
               <div className="flex">
                 <div className="w-1/3 ps-2">
-                  {allCategories.map((cat, i) => (
+                  {allCategoriesss.map((cat, i) => (
                     <div
                       key={i}
                       className="flex justify-between border-b border-gray-300 p-2 font-bold cursor-pointer"
@@ -126,10 +145,15 @@ export default function CategoryFilter() {
               </div>
             </div>
           )}
-        </div>
 
         <span className="font-extrabold text-xl p-3">{selectedCategory}</span>
+        </div>
       </div>
-    </>
+      <div className='side-nav  block py-3 bg-green-600 lg:hidden'>
+        <div className='w-[90%]  mx-auto'>
+      <FontAwesomeIcon size='3x' icon={faBars} onClick={()=>handleSideNavCategories(prev=>!prev)} className='text-white' />
+        </div>
+      </div>
+    </div>
   );
 }

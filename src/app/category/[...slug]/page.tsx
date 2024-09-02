@@ -4,8 +4,13 @@ import { useParams } from 'next/navigation';
 import ProductList from '../../../../component/productList';
 import CategoryShortcut from '../../../../component/categoryShortcut';
 import Shimmer from '../../../../component/shimmerui';
-import FilterComponent from '../../../../component/filterBy';
+// import FilterComponent from '../../../../component/filterBy';
+import dynamic from 'next/dynamic';
 import debounce from 'debounce';
+const FilterComponent=dynamic(()=>import('../../../../component/filterBy'),{
+  ssr:false
+}
+)
 
 export default function CategoryPage() {
   const { slug } = useParams(); 
@@ -18,6 +23,7 @@ export default function CategoryPage() {
   const [total, setTotal] = useState(0); // Total number of products
   const [maxPages, setMaxPages] = useState(1); // Maximum number of pages
   const [filters, setFilters] = useState({});
+  // console.log(filters,'kkkkkkkkkkkkkkkkkkkkk')
 
   useEffect(() => {
     const getCategories = async () => {
@@ -27,9 +33,9 @@ export default function CategoryPage() {
         if (!response.ok) throw new Error('Failed to fetch categories');
         const data = await response.json();
         setCategories(data);
-        setProducts([]);  // Clear previous products
-        setCurrentPage(1); // Reset pagination
-        setHasMore(true);  // Reset hasMore flag
+        // setProducts([]);  // Clear previous products
+        // setCurrentPage(1); // Reset pagination
+        // setHasMore(true);  // Reset hasMore flag
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -59,8 +65,9 @@ export default function CategoryPage() {
 if (Object.keys(filters).length > 0) {
   query = new URLSearchParams(filters).toString();
 }
+console.log(query,'qqqqqqqqqqqqqqqqqqqqqqqq')
     try {
-      const response = await fetch(`/api/products?page=${currentPage}&categoryId=${categoryIds}${query ? `&${query}` : ''}`);
+      const response = await fetch(`/api/products?page=${currentPage}&category=${categoryIds}${query ? `&${query}` : ''}`);
       if (!response.ok) throw new Error('Failed to fetch products');
       const data = await response.json();
       console.log(data,'data================>')
@@ -85,6 +92,12 @@ if (Object.keys(filters).length > 0) {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    setProducts([]);  // Clear previous products
+    setCurrentPage(1); // Reset pagination
+    setHasMore(true);  // Reset hasMore flag
+    getProducts()
+  }, [filters]);
 
  useEffect(() => {
   if (!categories.id || isLoading || !hasMore) return;  // Ensure categories are ready
@@ -96,12 +109,7 @@ if (Object.keys(filters).length > 0) {
   fetchProducts();
 }, [categories, currentPage,filters]);
 
-useEffect(() => {
-  // Reset products and pagination when filters change
-  setProducts([]);  // Clear previous products
-  setCurrentPage(1); // Reset pagination
-  setHasMore(true);  // Reset hasMore flag
-}, [filters]);
+
 const handleScroll = debounce(() => {
   const threshold = window.innerHeight * 0.9; 
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - threshold && !isLoading && hasMore) {
@@ -120,29 +128,25 @@ useEffect(() => {
 const handleFilterChange = (appliedFilters:any) => {
   setFilters(appliedFilters);
 };
-// let query=''
-// if (Object.keys(filters).length > 0) {
-//   query = new URLSearchParams(filters).toString();
-// }
 
-console.log(filters,'filters================>')
 
   return (
     <div className="bg-gray-100">
-      <div className='container flex mx-auto p-4'>
-        <div className="flex flex-col ps-20"style={{width:'75%'}}>
-          <CategoryShortcut />
-          <Suspense fallback={<Shimmer />}>
-            <ProductList products={products} />
-            {isLoading && <Shimmer />} {/* Show shimmer during loading */}
-          </Suspense>
-          {!hasMore && <p>No more products to load.</p>} {/* Message when all products are loaded */}
-        </div>
-        {
-          !isLoading &&
-        <FilterComponent onFilterChange={handleFilterChange} />
-        }
-      </div>
+     <div className='wrapper mx-auto pt-8'>
+  <div className="grid-item" id='a'>
+    <CategoryShortcut />
+    <Suspense fallback={<Shimmer />}>
+      <ProductList products={products} />
+      {isLoading && <Shimmer />} {/* Show shimmer during loading */}
+    </Suspense>
+    {!hasMore && <p>No more products to load.</p>} {/* Message when all products are loaded */}
+  </div>
+  
+  <div className="grid-item" id='b'>
+    <FilterComponent onFilterChange={handleFilterChange} />
+  </div>
+</div>
+
     </div>
   );
 }

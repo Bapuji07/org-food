@@ -3,6 +3,14 @@ import { useState, useEffect } from 'react';
 import { faSliders, faAngleRight, faAngleDown, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+
+// Utility to convert strings to camelCase
+const toCamelCase = (str: string) => {
+  return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+    index === 0 ? match.toLowerCase() : match.toUpperCase()
+  ).replace(/\s+/g, '');
+};
+
 const FilterComponent = ({ onFilterChange }) => {
   const [allBrands, setAllBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
@@ -16,7 +24,7 @@ const FilterComponent = ({ onFilterChange }) => {
   const [brandSearch, setBrandSearch] = useState('');
   const [filterCount, setFilterCount] = useState(0);
 
-  const specialDietOptions = ['Dairy free', 'Gluten free', 'Kosher', 'Lactose free', 'No added hormones', 'Organic', 'Larder', 'Vegan', 'Vegetarian'];
+  const specialDietOptions = ['Dairy free', 'Gluten free', 'Kosher', 'Lactose free', 'No added hormones', 'Organic larder', 'Vegan', 'Vegetarian'];
 
   useEffect(() => {
     const getAllBrands = async () => {
@@ -70,12 +78,15 @@ const FilterComponent = ({ onFilterChange }) => {
 
   // Apply Filters and send to parent
   const applyFilters = () => {
+    setShowFilter(false)
     const filters: any = {};
     filters.orderDirection = nameOrder;
     if (selectedBrand) filters.brand = selectedBrand;
-    // if (dietary.length > 0) filters.value = dietary.join(','); // Send as a comma-separated string
     if (newProducts) filters.newProduct = 1;
     if (offers) filters.discount = 1;
+    dietary.forEach(diet => {
+      filters[toCamelCase(diet)] = 1;
+    });
     
     onFilterChange(filters); // Send filters to parent
   };
@@ -88,16 +99,25 @@ const FilterComponent = ({ onFilterChange }) => {
     setBrandSearch('');
     setNewProducts(false);
     setOffers(false);
-    applyFilters();
-  };
+
+  onFilterChange({
+      orderDirection: 'asc',
+    })
+    };
 
   return (
-    <div className='relative right-1' style={{ width: '250px' }}>
-      <div onClick={handleShowFilter} className={`p-3 rounded-md text-xl font-bold bg-green-500 text-white cursor-pointer flex gap-5 justify-center items-center ${
+    <div>
+      <div onClick={handleShowFilter} className={ `filter-header p-3 rounded-md text-xl font-bold text-white cursor-pointer flex gap-5 justify-center items-center ${
         showFilter ? 'rounded-bl-none rounded-br-none' : ''
       }`}>
+        <div>
+
         <FontAwesomeIcon className='text-xl' icon={faSliders} /> Filter By {filterCount>0?`(${filterCount})`: ''}
+        </div>
+        <div>
+
         {showFilter ? <FontAwesomeIcon className='text-xl' icon={faAngleDown} /> : <FontAwesomeIcon className='text-xl' icon={faAngleRight} />}
+        </div>
       </div>
       {showFilter && (
         <div className={`flex flex-col border border-gray bg-white shadow-md ${showFilter ? 'rounded-tl-none rounded-tr-none' : ''}`}>
@@ -110,15 +130,17 @@ const FilterComponent = ({ onFilterChange }) => {
           </div>
           {showBrandFilter && (
             <div className='p-2' style={{ height: '150px', overflowY: 'scroll', backgroundColor: '#f2f2f2' }}>
+              <div className='flex justify-center'>
               <input
                 type='text'
                 value={brandSearch}
                 onChange={(e) => setBrandSearch(e.target.value)}
                 placeholder='Filter by name'
-                className='p-2 border text-sm border-gray-300 bg-white rounded-full'
+                className='p-2 border text-sm w-[85%] mx-auto border-gray-300 bg-white rounded-full'
               />
+              </div>
               {filteredBrands.map((brand) => (
-                <label key={brand.id} className='flex items-center cursor-pointer relative'>
+                <label key={brand.shortName} className='flex items-center cursor-pointer relative'>
                   <input
                     type='checkbox'
                     name='brand'
@@ -128,8 +150,8 @@ const FilterComponent = ({ onFilterChange }) => {
                     className='hidden'
                   />
                   <div className='flex items-center w-full p-2'>
-                    <div className={`w-5 absolute right-1 h-5 rounded-full border-2 ${brand.id === selectedBrand ? 'border-green-600' : 'border-gray-300'} flex items-center justify-center`}>
-                      {brand.id === selectedBrand && <FontAwesomeIcon icon={faCheck} className='text-green-600' />}
+                    <div className={`w-5 absolute right-1 h-5 text-[8px] rounded-full border-2 ${brand.id === selectedBrand ? 'border-green-600' : 'border-gray-300'} flex items-center justify-center`}>
+                      {brand.id === selectedBrand && <FontAwesomeIcon icon={faCheck} className=' text-green-600' />}
                     </div>
                     <span className='ml-2 text-sm'>{brand.name}</span>
                   </div>

@@ -37,7 +37,7 @@ export default function CategoryShortcut() {
   };
 
   return (
-          <div className="flex flex-wrap gap-1">
+          <div className="scroll-container flex flex-wrap gap-1 mb-5 w-full">
             {categories.children?.map((category:any, i:any) => (
               <div
                 key={i}

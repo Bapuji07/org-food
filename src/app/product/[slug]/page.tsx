@@ -17,9 +17,9 @@ interface ProductDetails {
   description: string;
   nutritional: string;
   originCountry: string;
-  weight: string;
   presentation: string;
   sku: string;
+  splitUnit:string
 }
 interface RelatedProducts{
   data?:[];
@@ -95,52 +95,53 @@ export default function ProductDetails() {
   return (
     <div className="bg-gray-100">
       <h3 className="text-xl ml-36 pt-10">Home / Ready To Eat / Salads / Salads</h3>
-      <div className="md:flex    md:px-12 mt-2 m-auto" style={{width:'85%'}}>
-        <div className="flex mx-auto w-full space-x-5 justify-center align-middle" style={{ height: '450px' }}>
+      <div className="max-w-[85%] 2xl:max-w-[75%] mt-2 m-auto" >
+        <div className="grid grid-cols-1 grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-5">
         {/* Left container */}
-          <div className=" p-5 sm:w-full bg-white rounded-md">
-            <div className="relative  h-full w-full">
-              <Image
-                              src={imgUrl}
-                alt={productDetails.name}
-                width={400}
-                height={400}
-                priority
-              />
-              <div
-                className="bg-green-700 text-white text-center flex items-center justify-center"
-                style={{
-                  position: 'absolute',
-                  top: '5px',
-                  right: '5px',
-                  height: '50px',
-                  width: '50px',
-                  borderRadius: '50%',
-                }}
-              >
-                <FontAwesomeIcon size="2x" icon={faHeart} />
-              </div>
-            </div>
-          </div>
+        <div className="md:p-5 p-2 w-full bg-white rounded-md h-[325px] md:h-[450px]">
+  <div className="relative h-full flex items-center justify-center">
+    <Image
+      src={imgUrl}
+      alt={productDetails.name}
+      width={400}
+      height={400}
+      priority
+      className="m-auto"
+      style={{ objectFit: 'contain', maxHeight: '100%', maxWidth: '100%' }}
+    />
+    <div
+      className="bg-green-700 rounded-full text-white text-center flex items-center justify-center absolute top-1 right-1"
+      style={{
+        height: '50px',
+        width: '50px',
+      }}
+    >
+      <FontAwesomeIcon size="2x" icon={faHeart} />
+    </div>
+  </div>
+</div>
 
           {/* Right container */}
-          <div className=" p-7  w-full  bg-white rounded-md">
-            <div className="md:text-2xl text-xl font-bold pb-2">{productDetails.name}</div>
-            <p className="font-semibold pr-2">AED {productDetails.price}</p>
-            <div className="pb-2 text-gray-600">{productDetails.presentation}</div>
-            <div className="font-bold pb-2">{productDetails.weight}</div>
-            <p className="pr-2 text-gray-600">Origin: <span className="font-bold">{productDetails.originCountry}</span></p>
-            <p className="pr-2 text-gray-600">Brand: <span className="font-bold">{brandName}</span></p>
-            <p className="pr-2 text-gray-600">SKU: <span className="font-bold">{productDetails.sku}</span></p>
-            <button className="bg-green-600 text-white text-sm px-5 py-2 mt-5" style={{ borderRadius: '30px' }}>
+          <div className=" p-7  flex flex-col  items-center md:items-start bg-white rounded-md">
+            <h1 className="text-2xl font-bold mb-3 md:5 ">{productDetails.name}</h1>
+            <div className="space-y-1 mb-2">
+            <p className="font-semibold ">{`AED ${productDetails.price}/${productDetails.splitUnit}`}</p>
+            <p className=" text-gray-600">{productDetails.presentation}</p>
+            </div>
+            <div className="space-y-1 ">
+            <p className=" text-gray-600">Origin: <span className="font-bold">{productDetails.originCountry}</span></p>
+            <p className=" text-gray-600">Brand: <span className="font-bold">{brandName}</span></p>
+            <p className=" text-gray-600">SKU: <span className="font-bold">{productDetails.sku}</span></p>
+            </div>
+            <button className="bg-green-600 text-white text-sm px-5 py-2 mt-5 rounded-full">
               Add to cart
             </button>
           </div>
         </div>
       </div>
 
-      <div className="mt-5 p-2 rounded-md w-4/5 bg-white m-auto">
-        <div className="space-x-5">
+      <div className="mt-5 p-6 rounded-md w-[85%] 2xl:w-[75%] bg-white m-auto">
+        <div className="desc-content ">
           <span
             className={`text-base cursor-pointer font-medium ${activeSection === 'description' ? 'font-semibold' : 'text-gray-700'}`}
             onClick={() => handleSectionClick('description')}

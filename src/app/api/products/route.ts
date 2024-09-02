@@ -5,8 +5,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     // Extract categoryId from query parameters
     const { searchParams } = new URL(req.url);
-    const categoryId = searchParams.get('categoryId');
+    const categoryId = searchParams.get('category');
     const page = searchParams.get('page');
+    const filters = [];
+    searchParams.forEach((value, key) => {
+      if (key !== 'category' && key !== 'page') {
+        filters.push(`${key}=${value}`);
+      }
+    });
+    const filterString = filters.length > 0 ? `&${filters.join('&')}` : '';
+
+    console.log(filters,'filtersssssssssss')
+    console.log(filterString,'string')
 
     if (!categoryId) {
       return NextResponse.json(
@@ -17,8 +27,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     // console.log(categoryId,'ooo')
 
     // Fetch products based on categoryId
-    const response = await fetch(`https://ofc-ecom-web.exceloid.in/api/products?size=16&page=${page}&category=${categoryId}&orderDirection=asc`);
-
+    console.log('hello')
+    const response = await fetch(`https://ofc-ecom-web.exceloid.in/api/products?size=16&page=${page}&category=${categoryId}${filters? `&${filterString}`:''}`);
+console.log('urlsfor',`https://ofc-ecom-web.exceloid.in/api/products?size=16&page=${page}&category=${categoryId}${filters? `&${filterString}`:''}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`);
     }
