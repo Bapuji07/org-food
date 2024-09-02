@@ -38,7 +38,7 @@ export default function SideNavCategory({ onCategoryChange }: any) {
             {
                 allCategoriesss.map((cat, i) => (
                     <div key={i} className=" bg-white">
-                        <div className="w-full py-3 px-1 font-bold flex mb-2 justify-between bg-gray-200" onClick={() => handleCategoryClick(cat.slug)}>{cat.name} <FontAwesomeIcon className="text-green-600" icon={faAngleRight} /> </div>
+                        <div className="w-full py-3 px-1 font-bold flex mb-2 justify-between bg-gray-200 cursor-pointer" onClick={() => handleCategoryClick(cat.slug)}>{cat.name} <FontAwesomeIcon className="text-green-600" icon={faAngleRight} /> </div>
                     </div>
                 ))
 
