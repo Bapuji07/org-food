@@ -13,7 +13,7 @@ interface Category {
   children?: Category[];
 }
 
-export default function CategoryFilter({onCategoryChange}) {
+export default function CategoryFilter({onCategoryChange}:any) {
   const router = useRouter();
   // const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [showCategory, setShowCategory] = useState<boolean>(false);

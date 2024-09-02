@@ -5,7 +5,7 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from "next/navigation";
 
-export default function SideNavCategory ({onCategoryChange})  {
+export default function SideNavCategory ({onCategoryChange}:any)  {
     const { allCategoriesss, fetchCategories } = useCategories();
     const router=useRouter()
 
