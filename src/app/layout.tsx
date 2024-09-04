@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CategoryFilter from "../../component/categoryHeader";
 import { SelectedCategoryProvider } from "../../context/selectedCategory";
+import { CategoryDataProvider } from "../../context/categoryData";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -32,11 +33,14 @@ const onCategoryChange=(value:boolean)=>{
   return (
     <html lang="en">
       <body className={inter.className}>
+        <CategoryDataProvider>
         <SelectedCategoryProvider>
         <CategoryFilter onCategoryChange={onCategoryChange} />
         {showSideNavCategory? showSideNavCategory && <SideNavCategory onCategoryChange={onCategoryChange} />:children}
 
         </SelectedCategoryProvider>
+
+        </CategoryDataProvider>
         </body>
 
     </html>

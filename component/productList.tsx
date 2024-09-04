@@ -18,9 +18,25 @@ export default function ProductList({ products }: any) {
 
   return (
     <div className="flex ">
-      <div className="product-container grid  gap-3 md:gap-4 ">
+      <div className="product-container gap-3 md:gap-4 ">
         {products.map((product: any) => {
           const imageUrl = product.images[0]?.url || 'https://ofc-ecom-web.exceloid.in/_nuxt/img/no-image.327c892.jpg';
+          const tagImages = [];
+          if (product.tags.newProduct) {
+            tagImages.push('https://organicfoodsandcafe.com/_nuxt/img/newProduct.ee42881.svg');
+          }
+          if (product.tags.glutenFree) {
+            tagImages.push('https://organicfoodsandcafe.com/_nuxt/img/glutenFree.a766ddd.svg');
+          }
+          if (product.tags.noAddedHormones) {
+            tagImages.push('https://organicfoodsandcafe.com/_nuxt/img/noAddedHormones.68a4a99.svg');
+          }
+          if (product.tags.organicLarder) {
+            tagImages.push('https://organicfoodsandcafe.com/_nuxt/img/organicLarder.b7076ee.svg');
+          }
+          if (product.tags.vegan) {
+            tagImages.push('https://organicfoodsandcafe.com/_nuxt/img/vegan.10d49fb.svg');
+          }
           return (
             <div key={product.id} className="relative">
               <div
@@ -58,14 +74,15 @@ export default function ProductList({ products }: any) {
                   </p>
                 </div>
                 <button
-                  className="bg-green-600 text-white text-xs w-2/3 mx-auto py-3 px-2 rounded-full  relative bottom-0"
-
+                  className=" text-white text-xs w-2/3 mx-auto py-3 px-2 rounded-full  relative bottom-0"
+                  style={{backgroundColor:'#29a637'}}
                 >
                   Add to cart
                 </button>
                 <div
-                  className="bg-green-700 text-white text-center flex items-center justify-center"
+                  className=" text-white text-center flex items-center justify-center"
                   style={{
+                    backgroundColor:'#29a637',
                     position: 'absolute',
                     top: '5px',
                     right: '5px',
@@ -75,6 +92,22 @@ export default function ProductList({ products }: any) {
                   }}
                 >
                   <FontAwesomeIcon icon={faHeart} />
+                </div>
+                <div className='tags absolute top-1 left-1 flex flex-col gap-1'>
+                  {tagImages.map((tag, i) => {
+
+                    return (
+                      <div key={i}
+                        className=" rounded-full "
+                        style={{
+                          height: '40px',
+                          width: '40px',
+                        }}>
+
+                        <img src={tag} alt="logo" />
+                      </div>
+
+                    )})}
                 </div>
               </div>
             </div>

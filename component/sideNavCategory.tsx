@@ -1,9 +1,9 @@
-'use client'
-import React, { useEffect } from "react"
-import { useCategories } from "../hooks/useGetCategories"
+'use client';
+import React from "react";
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from "next/navigation";
+import { useCategoryData } from "../context/categoryData";
 
 interface Category {
     name: string;
@@ -11,38 +11,34 @@ interface Category {
     children?: Category[];
 }
 
-interface UseCategoriesReturn {
-    allCategoriesss: Category[];
-    fetchCategories: () => void;
+interface SideNavCategoryProps {
+    onCategoryChange?: (value: boolean) => void;
 }
 
-export default function SideNavCategory({ onCategoryChange }: any) {
-    const { allCategoriesss, fetchCategories }: UseCategoriesReturn = useCategories();
-    const router = useRouter()
+export default function SideNavCategory({ onCategoryChange }: SideNavCategoryProps) {
+    const { categoryData } = useCategoryData();
+    const router = useRouter();
 
-    useEffect(() => {
-        fetchCategories()
-    }, [])
-
-    console.log(allCategoriesss, 'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
     const handleCategoryClick = (slug: string) => {
-        router.push(`/category/${slug}`)
+        router.push(`/category/${slug}`);
         if (onCategoryChange) {
             onCategoryChange(false);
         }
-    }
-
+    };
 
     return (
         <div>
-            {
-                allCategoriesss.map((cat, i) => (
-                    <div key={i} className=" bg-white">
-                        <div className="w-full py-3 px-1 font-bold flex mb-2 justify-between bg-gray-200 cursor-pointer" onClick={() => handleCategoryClick(cat.slug)}>{cat.name} <FontAwesomeIcon className="text-green-600" icon={faAngleRight} /> </div>
+            {categoryData.map((cat: Category, i: number) => (
+                <div key={i} className="bg-white">
+                    <div 
+                        className="w-full py-3 px-2 font-bold flex mb-2 justify-between bg-gray-100 cursor-pointer" 
+                        onClick={() => handleCategoryClick(cat.slug)}
+                    >
+                        {cat.name}
+                        <FontAwesomeIcon style={{color:'#29a637'}} icon={faAngleRight} />
                     </div>
-                ))
-
-            }
+                </div>
+            ))}
         </div>
-    )
+    );
 }

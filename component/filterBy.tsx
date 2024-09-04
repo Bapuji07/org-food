@@ -144,12 +144,14 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
               <span className="font-bold">Brand</span>
               {showBrandFilter ? (
                 <FontAwesomeIcon
-                  className="text-xl text-green-600"
+                  className="text-xl "
+                  style={{color:'#29a637'}}
                   icon={faAngleDown}
                 />
               ) : (
                 <FontAwesomeIcon
-                  className="text-xl text-green-600"
+                  className="text-xl "
+                  style={{color:'#29a637'}}
                   icon={faAngleRight}
                 />
               )}
@@ -185,7 +187,7 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
                       } flex items-center justify-center`}
                     >
                       {brand.id === selectedBrand && (
-                        <FontAwesomeIcon icon={faCheck} className="text-green-600" />
+                        <FontAwesomeIcon icon={faCheck} style={{color:'#29a637'}} />
                       )}
                     </div>
                     <span className="ml-2 text-sm">{brand.name}</span>
@@ -204,12 +206,14 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
               <span className="font-bold">Special Diet</span>
               {showDietaryFilter ? (
                 <FontAwesomeIcon
-                  className="text-xl text-green-600"
+                  className="text-xl "
+                  style={{color:'#29a637'}}
                   icon={faAngleDown}
                 />
               ) : (
                 <FontAwesomeIcon
-                  className="text-xl text-green-600"
+                  className="text-xl"
+                  style={{color:'#29a637'}}
                   icon={faAngleRight}
                 />
               )}
@@ -236,7 +240,7 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
                       } flex items-center justify-center`}
                     >
                       {dietary.includes(option) && (
-                        <FontAwesomeIcon icon={faCheck} className="text-green-600" />
+                        <FontAwesomeIcon icon={faCheck} style={{color:'#29a637'}} />
                       )}
                     </div>
                     <span className="ml-2 text-sm">{option}</span>
@@ -262,7 +266,7 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
                   } flex items-center justify-center`}
                 >
                   {newProducts && (
-                    <FontAwesomeIcon icon={faCheck} className="text-green-600" />
+                    <FontAwesomeIcon icon={faCheck} style={{color:'#29a637'}} />
                   )}
                 </div>
                 <span className="font-bold">New Products</span>
@@ -285,7 +289,7 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
                   } flex items-center justify-center`}
                 >
                   {offers && (
-                    <FontAwesomeIcon icon={faCheck} className="text-green-600" />
+                    <FontAwesomeIcon icon={faCheck} style={{color:'#29a637'}}/>
                   )}
                 </div>
                 <span className="font-bold">Offers</span>
@@ -310,7 +314,7 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
                   } flex items-center justify-center`}
                 >
                   {nameOrder === 'asc' && (
-                    <FontAwesomeIcon icon={faCheck} className="text-green-600" />
+                    <FontAwesomeIcon icon={faCheck} style={{color:'#29a637'}} />
                   )}
                 </div>
                 <span className="font-bold">Name: A to Z</span>
@@ -327,7 +331,8 @@ const FilterComponent: React.FC<FilterProps> = ({ onFilterChange }) => {
             </button>
             <button
               onClick={applyFilters}
-              className="p-2 px-3 text-sm bg-green-600 text-white rounded-full"
+              className="p-2 px-3 text-sm text-white rounded-full"
+              style={{backgroundColor:'#29a637'}}
             >
               Search
             </button>

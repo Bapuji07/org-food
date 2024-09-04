@@ -5,40 +5,49 @@ import { useRouter } from 'next/navigation';
 import { faAngleDown, faAngleRight, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelectedCategory } from '../context/selectedCategory';
-import { useCategories } from '../hooks/useGetCategories';
-
+import { useCategoryData } from '../context/categoryData';
 interface Category {
   name: string;
   slug: string;
   children?: Category[];
 }
-
-interface UseCategoriesReturn {
-  allCategoriesss: Category[];
-  fetchCategories: () => void;
-}
-
 interface CategoryFilterProps {
   onCategoryChange: (isOpen: boolean) => void;
 }
 
 export default function CategoryFilter({ onCategoryChange }: CategoryFilterProps) {
   const router = useRouter();
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [showCategory, setShowCategory] = useState<boolean>(false);
   const [subCategories, setSubCategories] = useState<Category[]>([]);
   const [lastCategories, setLastCategories] = useState<Category[]>([]);
   const { selectedCategory, setSelectedCategory } = useSelectedCategory();
-  const { allCategoriesss, fetchCategories }: UseCategoriesReturn = useCategories();
   const [isSideNavOpen, setSideNavOpen] = useState<boolean>(false);
+  const{setCategoryData}=useCategoryData()
 
   const handleSideNavCategories = () => {
     setSideNavOpen(prev => !prev);
     onCategoryChange(!isSideNavOpen);
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+useEffect(()=>{
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/category');
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      const data = await response.json();
+      console.log(data, 'Categories fetched');
+      setAllCategories(data);
+      setCategoryData(data)
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+  fetchCategories()
+},[])
+
 
   const handleCategoryClick = (selectedCategory: string, selectedCategoryName: string) => {
     setSelectedCategory(selectedCategoryName);
@@ -70,8 +79,9 @@ export default function CategoryFilter({ onCategoryChange }: CategoryFilterProps
           onMouseLeave={handleMouseLeave}
         >
           <div
-            className="flex items-center gap-2 font-extrabold text-green-600 text-xl p-3 cursor-pointer"
+            className="flex items-center gap-2 font-extrabold  text-xl p-3 cursor-pointer"
             onMouseEnter={handleCategoryMouseEnter}
+            style={{color:'#29a637'}}
           >
             <p>ALL CATEGORIES</p>
             <FontAwesomeIcon icon={faAngleDown} className="text-xl" />
@@ -84,14 +94,14 @@ export default function CategoryFilter({ onCategoryChange }: CategoryFilterProps
             >
               <div className="flex">
                 <div className="w-1/3 ps-2">
-                  {allCategoriesss.map((cat, i) => (
+                  {allCategories.map((cat, i) => (
                     <div
                       key={i}
                       className="flex justify-between border-b border-gray-300 p-2 font-bold cursor-pointer"
                       onMouseEnter={() => handleMouseEnter(cat, 'sub')}
                       onClick={() => handleCategoryClick(cat.slug, cat.name)}
                     >
-                      {cat.name} <FontAwesomeIcon className="text-green-600" icon={faAngleRight} />
+                      {cat.name} <FontAwesomeIcon style={{color:'#29a637'}} icon={faAngleRight} />
                     </div>
                   ))}
                 </div>
@@ -105,7 +115,7 @@ export default function CategoryFilter({ onCategoryChange }: CategoryFilterProps
                         onMouseEnter={() => handleMouseEnter(subCat, 'last')}
                         onClick={() => handleCategoryClick(subCat.slug, subCat.name)}
                       >
-                        {subCat.name} <FontAwesomeIcon className="text-green-600" icon={faAngleRight} />
+                        {subCat.name} <FontAwesomeIcon style={{color:'#29a637'}} icon={faAngleRight} />
                       </div>
                     ))}
                   </div>
@@ -130,7 +140,7 @@ export default function CategoryFilter({ onCategoryChange }: CategoryFilterProps
           <span className="font-extrabold text-xl p-3">{selectedCategory}</span>
         </div>
       </div>
-      <div className="side-nav block py-3 bg-green-600 lg:hidden">
+      <div className="side-nav block py-3  lg:hidden" style={{backgroundColor:'#29a637'}} >
         <div className="w-[90%] mx-auto">
           <FontAwesomeIcon
             size="3x"

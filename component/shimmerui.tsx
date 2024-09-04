@@ -3,13 +3,13 @@ import React from 'react';
 export default function Shimmer() {
   return (
     <div className="animate-pulse">
-      <div className="shimmer-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="shimmer-grid grid grid-cols-4 gap-4">
         {/* Simulating multiple shimmer cards */}
         {Array.from({ length: 12 }).map((_, index) => (
           <div
             key={index}
             className="border border-gray-200 bg-white rounded-lg flex flex-col justify-between p-5"
-            style={{ height: '350px', width: '200px' }}
+            style={{ height: '350px' }}
           >
             {/* Image shimmer */}
             <div className="h-36 bg-gray-300 rounded-lg mb-4"></div>
