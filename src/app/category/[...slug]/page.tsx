@@ -1,16 +1,16 @@
 'use client';
-import { Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import ProductList from '../../../../component/productList';
+// import ProductList from '../../../../component/productList';
 import CategoryShortcut from '../../../../component/categoryShortcut';
 import Shimmer from '../../../../component/shimmerui';
-// import FilterComponent from '../../../../component/filterBy';
 import dynamic from 'next/dynamic';
 import debounce from 'debounce';
 const FilterComponent=dynamic(()=>import('../../../../component/filterBy'),{
   ssr:false
 }
 )
+const ProductList=lazy(()=>import('../../../../component/productList'))
 
 export default function CategoryPage() {
   const { slug } = useParams(); 
@@ -65,12 +65,10 @@ export default function CategoryPage() {
 if (Object.keys(filters).length > 0) {
   query = new URLSearchParams(filters).toString();
 }
-console.log(query,'qqqqqqqqqqqqqqqqqqqqqqqq')
     try {
       const response = await fetch(`/api/products?page=${currentPage}&category=${categoryIds}${query ? `&${query}` : ''}`);
       if (!response.ok) throw new Error('Failed to fetch products');
       const data = await response.json();
-      console.log(data,'data================>')
 
       const { total, page,maxPages } = data;
       
@@ -137,7 +135,7 @@ const handleFilterChange = (appliedFilters:any) => {
     <CategoryShortcut />
     <Suspense fallback={<Shimmer />}>
       <ProductList products={products} />
-      {isLoading && <Shimmer />} {/* Show shimmer during loading */}
+      {isLoading && <Shimmer />} 
     </Suspense>
     {!hasMore && <p>No more products to load.</p>} {/* Message when all products are loaded */}
   </div>

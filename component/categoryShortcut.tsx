@@ -35,6 +35,7 @@ export default function CategoryShortcut() {
     setSelectedCategory(name)
     router.push(`/category/${slug}`);
   };
+  const dynamicBackgroundColor='#29a637'
 
   return (
           <div className="scroll-container flex flex-wrap gap-1 mb-5 w-full">
@@ -42,8 +43,11 @@ export default function CategoryShortcut() {
               <div
                 key={i}
                 className={`border h-10 border-gray-300 cursor-pointer rounded-full px-4 py-2 text-center text-sm font-semibold shadow-md ${
-                  category.slug == slug ? 'bg-green-600 text-white' : 'bg-white'
+                  category.slug == slug ? `text-white ` : 'bg-white'
                 } transition-shadow duration-300`}
+                style={{
+                  backgroundColor: category.slug == slug ? dynamicBackgroundColor : 'white',
+                }}
                 onClick={() => handleCategoryClick(category.slug,category.name)}
               >
                 {category.name}

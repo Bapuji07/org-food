@@ -24,24 +24,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-const [showSideNavCategory,setShowSideNavCategory]=useState(false)
+  const [showSideNavCategory, setShowSideNavCategory] = useState(false)
 
-const onCategoryChange=(value:boolean)=>{
-  setShowSideNavCategory(value)
-}
+  const onCategoryChange = (value: boolean) => {
+    setShowSideNavCategory(value)
+  }
 
   return (
     <html lang="en">
       <body className={inter.className}>
         <CategoryDataProvider>
-        <SelectedCategoryProvider>
-        <CategoryFilter onCategoryChange={onCategoryChange} />
-        {showSideNavCategory? showSideNavCategory && <SideNavCategory onCategoryChange={onCategoryChange} />:children}
-
-        </SelectedCategoryProvider>
+          <SelectedCategoryProvider>
+            <CategoryFilter onCategoryChange={onCategoryChange} />
+            {showSideNavCategory &&
+              <SideNavCategory onCategoryChange={onCategoryChange} />
+            }
+            <div style={{ display: showSideNavCategory ? 'none' : 'block' }}>
+              {children}
+            </div>
+          </SelectedCategoryProvider>
 
         </CategoryDataProvider>
-        </body>
+      </body>
 
     </html>
   );

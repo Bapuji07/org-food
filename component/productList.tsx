@@ -100,8 +100,8 @@ export default function ProductList({ products }: any) {
                       <div key={i}
                         className=" rounded-full "
                         style={{
-                          height: '40px',
-                          width: '40px',
+                          height: '2.5rem',
+                          width: '2.5rem',
                         }}>
 
                         <img src={tag} alt="logo" />

@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useEffect } from "react";
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from "next/navigation";
@@ -19,6 +19,26 @@ export default function SideNavCategory({ onCategoryChange }: SideNavCategoryPro
     const { categoryData } = useCategoryData();
     const router = useRouter();
 
+    // Handle the case where window size is greater than 1024
+    useEffect(() => {
+        const checkWindowSize = () => {
+            if (window.innerWidth > 1024 && onCategoryChange) {
+                onCategoryChange(false);
+            }
+        };
+
+        // Check on mount
+        checkWindowSize();
+
+        // Add event listener to track window resize
+        window.addEventListener('resize', checkWindowSize);
+
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', checkWindowSize);
+        };
+    }, [onCategoryChange]);
+
     const handleCategoryClick = (slug: string) => {
         router.push(`/category/${slug}`);
         if (onCategoryChange) {
@@ -27,7 +47,7 @@ export default function SideNavCategory({ onCategoryChange }: SideNavCategoryPro
     };
 
     return (
-        <div>
+        <div className="z-50 relative top-0 left-0">
             {categoryData.map((cat: Category, i: number) => (
                 <div key={i} className="bg-white">
                     <div 
@@ -35,7 +55,7 @@ export default function SideNavCategory({ onCategoryChange }: SideNavCategoryPro
                         onClick={() => handleCategoryClick(cat.slug)}
                     >
                         {cat.name}
-                        <FontAwesomeIcon style={{color:'#29a637'}} icon={faAngleRight} />
+                        <FontAwesomeIcon style={{ color: '#29a637' }} icon={faAngleRight} />
                     </div>
                 </div>
             ))}
